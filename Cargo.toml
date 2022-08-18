@@ -1,0 +1,9 @@
+[package]
+edition = "2021"
+name = "pipeview"
+version = "0.0.1"
+description = "Reserved."
+license = "MIT"
+resolver = "2"
+
+[dependencies]
