@@ -3,7 +3,17 @@ edition = "2021"
 name = "pipeview"
 version = "0.0.1"
 description = "Reserved."
+categories = ["command-line-utilities", "visualization"]
+keywords = ["pipe", "meter", "gauge"]
 license = "MIT"
 resolver = "2"
 
 [dependencies]
+anyhow = "1.0.53"
+autoclap = "0.2.2"
+colored = "2"
+clap = { version = "3.2.19"}
+dotenv = "0.15.0"
+indicatif = "0.16.2"
+strfmt = "0.2.2"
+tokio = { version = "1.20.1", features = ["full"] }
