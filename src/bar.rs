@@ -8,6 +8,8 @@ use strfmt::strfmt;
 const DEFAULT_PIPEVIEW_PROGRESS_CHARS: &str = "█▉▊▋▌▍▎▏  ";
 const DEFAULT_PIPEVIEW_TEMPLATE: &str = "{spinner:.cyan}▕{bar:.white}▏{msg}";
 const DEFAULT_PIPEVIEW_TICK: u64 = 100;
+pub const DEFAULT_PIPEVIEW_SIZE: u64 = 100;
+
 fn construct_progress_bar(
     total_size: u64,
     progress_chars: &str,
