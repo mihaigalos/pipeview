@@ -5,9 +5,9 @@ use std::collections::HashMap;
 use std::env;
 use strfmt::strfmt;
 
-const DEFAULT_VUMETER_PROGRESS_CHARS: &str = "█▉▊▋▌▍▎▏  ";
-const DEFAULT_VUMETER_TEMPLATE: &str = "{spinner:.cyan}▕{bar:.white}▏{msg}";
-const DEFAULT_VUMETER_TICK: u64 = 100;
+const DEFAULT_PIPEVIEW_PROGRESS_CHARS: &str = "█▉▊▋▌▍▎▏  ";
+const DEFAULT_PIPEVIEW_TEMPLATE: &str = "{spinner:.cyan}▕{bar:.white}▏{msg}";
+const DEFAULT_PIPEVIEW_TICK: u64 = 100;
 fn construct_progress_bar(
     total_size: u64,
     progress_chars: &str,
@@ -34,12 +34,12 @@ pub struct WrappedBar {
 impl WrappedBar {
     pub fn new(total_size: u64) -> WrappedBar {
         dotenv().ok();
-        let progress_chars = &env::var("VUMETER_PROGRESSBAR_PROGRESS_CHARS")
-            .unwrap_or(DEFAULT_VUMETER_PROGRESS_CHARS.to_string());
-        let template = &env::var("VUMETER_PROGRESSBAR_TEMPLATE")
-            .unwrap_or(DEFAULT_VUMETER_TEMPLATE.to_string());
-        let tick = env::var("VUMETER_PROGRESSBAR_TICK")
-            .unwrap_or(DEFAULT_VUMETER_TICK.to_string())
+        let progress_chars = &env::var("PIPEVIEW_PROGRESSBAR_PROGRESS_CHARS")
+            .unwrap_or(DEFAULT_PIPEVIEW_PROGRESS_CHARS.to_string());
+        let template = &env::var("PIPEVIEW_PROGRESSBAR_TEMPLATE")
+            .unwrap_or(DEFAULT_PIPEVIEW_TEMPLATE.to_string());
+        let tick = env::var("PIPEVIEW_PROGRESSBAR_TICK")
+            .unwrap_or(DEFAULT_PIPEVIEW_TICK.to_string())
             .parse::<u64>()
             .unwrap();
         let output = construct_progress_bar(total_size, progress_chars, template, tick);
