@@ -18,8 +18,19 @@ pub fn colorize<'a>(
 
     for (pos, e) in caps.iter().enumerate() {
         let colored_group = match colors[pos] {
+            "bblue" => e.bright_blue(),
+            "bcyan" => e.bright_cyan(),
+            "bgreen" => e.bright_green(),
+            "blue" => e.blue(),
+            "bmagenta" => e.bright_magenta(),
+            "bred" => e.bright_red(),
+            "byellow" => e.bright_yellow(),
             "cyan" => e.cyan(),
+            "green" => e.green(),
             "magenta" => e.magenta(),
+            "red" => e.red(),
+            "white" => e.white(),
+            "yellow" => e.yellow(),
             _ => ColoredString::from(""),
         };
         println!("{} -> {}", e, colored_group);
