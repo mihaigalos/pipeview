@@ -14,7 +14,7 @@ pub fn colorize<'a>(
     let caps = re.captures(input).ok_or("Cannot apply regex")?;
     let mut result: Vec<ColoredString> = vec![];
 
-    let caps = all_captures_except_first(caps)?;
+    let caps = all_captures_except_first(&caps)?;
 
     for (pos, e) in caps.iter().enumerate() {
         let colored_group = match colors[pos] {
@@ -40,8 +40,8 @@ pub fn colorize<'a>(
     Ok(result)
 }
 
-fn all_captures_except_first<'a>(input: regex::Captures) -> Result<Vec<String>, &'static str> {
-    let mut result: Vec<String> = vec![];
+fn all_captures_except_first<'a>(input: &'a regex::Captures) -> Result<Vec<&'a str>, &'static str> {
+    let mut result: Vec<&str> = vec![];
     let mut i = 0;
     for e in input.iter() {
         if i == 0 {
@@ -49,7 +49,7 @@ fn all_captures_except_first<'a>(input: regex::Captures) -> Result<Vec<String>, 
             continue;
         }
         let element = e.ok_or("No element")?.as_str();
-        result.push(element.to_string());
+        result.push(element);
     }
 
     Ok(result)
@@ -75,7 +75,7 @@ mod tests {
         let expected: Vec<String> = vec!["ab".to_string(), "cd".to_string()];
         let re = Regex::new("(.*) (.*)").unwrap();
         let caps = re.captures("ab cd").ok_or("Cannot apply regex").unwrap();
-        let result = all_captures_except_first(caps).unwrap();
+        let result = all_captures_except_first(&caps).unwrap();
         assert_eq!(result, expected);
     }
 }
