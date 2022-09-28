@@ -16,6 +16,14 @@ pub fn colorize<'a>(
 
     let caps = all_captures_except_first(&caps)?;
 
+    if colors.len() != caps.len() {
+        panic!(
+            "Length of input: {} != length of regex match patterns: {}",
+            colors.len(),
+            caps.len()
+        );
+    }
+
     for (pos, e) in caps.iter().enumerate() {
         let colored_group = match colors[pos] {
             "bblue" => e.bright_blue(),
@@ -33,7 +41,6 @@ pub fn colorize<'a>(
             "yellow" => e.yellow(),
             _ => ColoredString::from(""),
         };
-        println!("{} -> {}", e, colored_group);
         result.push(colored_group);
     }
 
