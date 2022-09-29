@@ -41,6 +41,7 @@ pub fn colorize<'a>(
             "yellow" => e.yellow(),
             _ => ColoredString::from(""),
         };
+        print!("{} ", colored_group);
         result.push(colored_group);
     }
 

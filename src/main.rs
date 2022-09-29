@@ -5,20 +5,34 @@ use pipeview::bar::DEFAULT_PIPEVIEW_SIZE;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let app: Command = autoclap!();
-    let _ = app
+     let mut app: clap::Command = autoclap!()
         .arg(
-            Arg::new("raw")
-                .long("raw")
-                .short('r')
-                .help("Current, min, max stats from raw data as float."),
+            Arg::new("input")
+                .help("Raw data. TODO: Replace this with stdin")
+                .required(true)
         )
-        .try_get_matches()
-        .unwrap_or_else(|e| e.exit());
+        .arg(
+            Arg::new("regex")
+                .help("Regular expression groups to match the input.")
+                .required(true)
+        )
+        .arg(
+            Arg::new("colors")
+                .help("Actual colors for the matched groups.")
+                .required(true)
+        );
 
-    let mut pipeview = pipeview::bar::WrappedBar::new(DEFAULT_PIPEVIEW_SIZE);
+    let args = app.clone().try_get_matches().unwrap_or_else(|e| e.exit());
 
-    loop {
-        pipeview.update();
-    }
+    let input = args.get_one::<String>("input").unwrap();
+    let regex = args.get_one::<String>("regex").unwrap();
+    let colors = args.get_one::<String>("colors").unwrap();
+
+    let _ = pipeview::colorizer::colorize(&input, &regex, &colors).unwrap();
+    // let mut pipeview = pipeview::bar::WrappedBar::new(DEFAULT_PIPEVIEW_SIZE);
+    // loop {
+    //     pipeview.update();
+    // }
+    
+    Ok(())
 }
