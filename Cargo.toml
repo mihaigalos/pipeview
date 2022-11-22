@@ -10,9 +10,9 @@ resolver = "2"
 
 [dependencies]
 anyhow = "1.0.53"
-autoclap = "0.2.2"
+autoclap = "0.2.5"
 colored = "2"
-clap = { version = "3.2.19"}
+clap = { version = "4.0.4", features = ["string"]}
 dotenv = "0.15.0"
 indicatif = "0.16.2"
 regex = "1.6.0"

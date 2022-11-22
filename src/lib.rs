@@ -1,2 +1,2 @@
 pub mod bar;
-pub mod regex_color;
+pub mod colorizer;
