@@ -1,25 +1,24 @@
 use anyhow::Result;
 use autoclap::autoclap;
 use clap::{Arg, Command};
-use pipeview::bar::DEFAULT_PIPEVIEW_SIZE;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-     let mut app: clap::Command = autoclap!()
+    let app: clap::Command = autoclap!()
         .arg(
             Arg::new("input")
                 .help("Raw data. TODO: Replace this with stdin")
-                .required(true)
+                .required(true),
         )
         .arg(
             Arg::new("regex")
                 .help("Regular expression groups to match the input.")
-                .required(true)
+                .required(true),
         )
         .arg(
             Arg::new("colors")
                 .help("Actual colors for the matched groups.")
-                .required(true)
+                .required(true),
         );
 
     let args = app.clone().try_get_matches().unwrap_or_else(|e| e.exit());
@@ -33,6 +32,5 @@ async fn main() -> Result<()> {
     // loop {
     //     pipeview.update();
     // }
-    
     Ok(())
 }
