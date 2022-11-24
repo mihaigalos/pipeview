@@ -3,6 +3,8 @@ use autoclap::autoclap;
 use clap::{Arg, ArgAction, Command};
 use std::io::BufRead;
 
+use pipeview::formats::traits::Formatter;
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let app: clap::Command = autoclap!()
@@ -33,7 +35,7 @@ async fn main() -> Result<()> {
                 .map(|s| s.as_str())
                 .unwrap(),
         ),
-        true => pipeview::formats::nginx::get_config(),
+        true => pipeview::formats::nginx::Nginx::get_config(),
     };
 
     let stdin = std::io::stdin();
