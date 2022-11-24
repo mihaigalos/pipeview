@@ -1,8 +1,6 @@
 use colored::*;
 use regex::Regex;
 
-pub struct Colorizer;
-
 pub fn colorize<'a>(
     input: &'a str,
     regex: &'a str,

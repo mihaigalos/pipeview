@@ -12,7 +12,7 @@ resolver = "2"
 anyhow = "1.0.53"
 autoclap = "0.2.5"
 colored = "2"
-clap = { version = "4.0.4", features = ["string"]}
+clap = { version = "4.0.18", features = ["string"]}
 dotenv = "0.15.0"
 indicatif = "0.16.2"
 regex = "1.6.0"
