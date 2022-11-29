@@ -42,3 +42,4 @@ foo.com - - [01/Jun/2020:06:37:14 +0000] "GET /assets/fonts/foo-logo.woff2 HTTP/
 217.227.73.124 - - [01/Jun/2020:06:59:23 +0000] "HEAD /blog HTTP/1.1" 301 0 "-" "jetmon/1.0 (Jetpack Site Uptime Monitor by WordPress.com)"
 217.227.73.124 - - [01/Jun/2020:06:59:23 +0000] "HEAD /blog HTTP/1.1" 301 0 "-" "jetmon/1.0 (Jetpack Site Uptime Monitor by WordPress.com)"
 217.227.73.124 - - [01/Jun/2020:06:59:23 +0000] "HEAD /blog/ HTTP/1.1" 301 0 "-" "jetmon/1.0 (Jetpack Site Uptime Monitor by WordPress.com)"
+

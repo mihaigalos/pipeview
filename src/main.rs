@@ -41,7 +41,7 @@ async fn main() -> Result<()> {
     let stdin = std::io::stdin();
     for line in stdin.lock().lines() {
         match line {
-            Err(_) => break, // with ^Z
+            Err(_) => break,
             Ok(s) => {
                 let _ = pipeview::colorizer::colorize(&s, &regex, &colors).unwrap();
                 println!("");
