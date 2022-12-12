@@ -1,4 +1,6 @@
 # pipeview
+[![crates.io](https://img.shields.io/crates/d/pipeview.svg)](https://crates.io/crates/pipeview)
+
 A command line pipe inspection utility.
 ![screenshot](screenshots/pipeview.png)
 
