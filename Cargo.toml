@@ -2,7 +2,7 @@
 edition = "2021"
 name = "pipeview"
 version = "0.1.0"
-description = "A command line pipe inspection utility."
+description = "🧪 A command line pipe inspection utility."
 categories = ["command-line-utilities", "visualization"]
 keywords = ["pipe", "meter", "gauge"]
 license = "MIT"
