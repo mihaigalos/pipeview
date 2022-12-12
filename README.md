@@ -22,4 +22,5 @@ Nginx logs can be directly inspected using the `--nginx` flag:
 ```bash
 $ cat test/demo_nginx_access_log | pipeview --nginx
 ```
+![screenshot](screenshots/pipeview-nginx.png)
 
