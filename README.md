@@ -1,5 +1,6 @@
 # pipeview
 A command line pipe inspection utility.
+![screenshot](screenshots/pipeview.png)
 
 ## Why?
 
