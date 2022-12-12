@@ -1,8 +1,10 @@
 # pipeview
+A command line pipe inspection utility.
 
 ## Why?
 
-Simple coloring of an input pipe.
+* [x] Simple coloring of an input pipe.
+* [ ] Progress bar (same as Linux's `pv`) - WIP.
 
 ## Usage
 
