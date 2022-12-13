@@ -28,3 +28,11 @@ $ cat test/demo_nginx_access_log | pipeview --nginx
 
 ![screenshot-nginx](screenshots/pipeview-nginx.png)
 
+
+## Installation
+
+### Building from source
+
+```bash
+$ cargo install pipeview
+```
