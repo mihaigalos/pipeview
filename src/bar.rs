@@ -37,16 +37,16 @@ impl WrappedBar {
     pub fn new(total_size: u64) -> WrappedBar {
         dotenv().ok();
         let progress_chars = &env::var("PIPEVIEW_PROGRESSBAR_PROGRESS_CHARS")
-            .unwrap_or(DEFAULT_PIPEVIEW_PROGRESS_CHARS.to_string());
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_PROGRESS_CHARS.to_string());
         let template = &env::var("PIPEVIEW_PROGRESSBAR_TEMPLATE")
-            .unwrap_or(DEFAULT_PIPEVIEW_TEMPLATE.to_string());
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TEMPLATE.to_string());
         let tick = env::var("PIPEVIEW_PROGRESSBAR_TICK")
-            .unwrap_or(DEFAULT_PIPEVIEW_TICK.to_string())
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TICK.to_string())
             .parse::<u64>()
             .unwrap();
         let output = construct_progress_bar(total_size, progress_chars, template, tick);
         WrappedBar {
-            output: output,
+            output,
             max: 0.0,
             min: std::f64::MAX,
         }
@@ -65,7 +65,7 @@ impl WrappedBar {
         let pos = std::io::stdin()
             .lines()
             .next()
-            .unwrap_or(Ok(previous_pos.to_string()))
+            .unwrap_or_else(|| Ok(previous_pos.to_string()))
             .unwrap()
             .parse::<f64>()
             .unwrap_or(previous_pos as f64);
