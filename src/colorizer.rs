@@ -6,7 +6,7 @@ pub fn colorize<'a>(
     regex: &'a str,
     colors: &'a str,
 ) -> Result<Vec<ColoredString>, &'static str> {
-    let colors: Vec<&'a str> = colors.split(" ").collect();
+    let colors: Vec<&'a str> = colors.split(' ').collect();
 
     let re = Regex::new(regex).unwrap();
     let caps = re.captures(input);//.ok_or("Cannot apply regex")?;
@@ -55,7 +55,7 @@ fn all_captures_except_first<'a>(input: &'a regex::Captures) -> Result<Vec<&'a s
     let mut i = 0;
     for e in input.iter() {
         if i == 0 {
-            i = i + 1;
+            i += 1;
             continue;
         }
         let element = e.ok_or("No element")?.as_str();
