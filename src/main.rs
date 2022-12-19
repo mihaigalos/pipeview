@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
                 .required(false),
         );
 
-    let args = app.clone().try_get_matches().unwrap_or_else(|e| e.exit());
+    let args = app.try_get_matches().unwrap_or_else(|e| e.exit());
 
     let (regex, colors) = match args.get_flag("nginx") {
         false => (
@@ -43,8 +43,8 @@ async fn main() -> Result<()> {
         match line {
             Err(_) => break,
             Ok(s) => {
-                let _ = pipeview::colorizer::colorize(&s, &regex, &colors).unwrap();
-                println!("");
+                let _ = pipeview::colorizer::colorize(&s, regex, colors).unwrap();
+                println!();
             }
         }
     }
