@@ -10,7 +10,7 @@ license = "MIT"
 resolver = "2"
 
 [dependencies]
-anyhow = "1.0.53"
+anyhow = "1.0.68"
 autoclap = "0.2.5"
 colored = "2"
 clap = { version = "4.0.18", features = ["string"]}
