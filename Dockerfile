@@ -9,7 +9,7 @@ RUN rustup update 1.64 && rustup default 1.64
 
 RUN cd /src && cargo build --release
 
-FROM alpine:3.16 as tool
+FROM alpine:3.17 as tool
 
 RUN apk update && apk add libgcc
 
