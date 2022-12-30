@@ -11,11 +11,11 @@ resolver = "2"
 
 [dependencies]
 anyhow = "1.0.68"
-autoclap = "0.2.5"
+autoclap = "0.3.10"
 colored = "2"
 clap = { version = "4.0.18", features = ["string"]}
 dotenv = "0.15.0"
 indicatif = "0.16.2"
-regex = "1.6.0"
+regex = "1.7.0"
 strfmt = "0.2.2"
-tokio = { version = "1.20.1", features = ["full"] }
+tokio = { version = "1.23.0", features = ["full"] }
