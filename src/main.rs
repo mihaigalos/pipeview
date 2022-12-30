@@ -19,6 +19,13 @@ async fn main() -> Result<()> {
                 .required(false),
         )
         .arg(
+            Arg::new("aim")
+                .long("aim")
+                .help("Parse input as mihaigalos/aim log.")
+                .action(ArgAction::SetTrue)
+                .required(false),
+        )
+        .arg(
             Arg::new("nginx")
                 .long("nginx")
                 .help("Parse input as Nginx log.")
@@ -28,14 +35,15 @@ async fn main() -> Result<()> {
 
     let args = app.try_get_matches().unwrap_or_else(|e| e.exit());
 
-    let (regex, colors) = match args.get_flag("nginx") {
-        false => (
-            args.get_one::<String>("regex").map(|s| s.as_str()).unwrap(),
-            args.get_one::<String>("colors")
-                .map(|s| s.as_str())
-                .unwrap(),
-        ),
-        true => pipeview::formats::nginx::Nginx::get_config(),
+    let (regex, colors) = if args.get_flag("aim") {
+        pipeview::formats::aim::Aim::get_config()
+    } else if args.get_flag("nginx") {
+        pipeview::formats::nginx::Nginx::get_config()
+    } else {
+        (args.get_one::<String>("regex").map(|s| s.as_str()).unwrap(),
+        args.get_one::<String>("colors")
+            .map(|s| s.as_str())
+            .unwrap())
     };
 
     let stdin = std::io::stdin();
