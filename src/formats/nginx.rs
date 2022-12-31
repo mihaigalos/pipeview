@@ -10,7 +10,7 @@ impl Formatter for Nginx {
         (regex_groups, colors)
     }
 
-    fn print(){
+    fn print() {
         let (regex_groups, color) = Nginx::get_config();
         println!("Nginx");
         println!("Regex: {}", regex_groups);

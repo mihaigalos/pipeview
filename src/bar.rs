@@ -3,6 +3,7 @@ use dotenv::dotenv;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::collections::HashMap;
 use std::env;
+use std::time::Duration;
 use strfmt::strfmt;
 
 const DEFAULT_PIPEVIEW_PROGRESS_CHARS: &str = "█▉▊▋▌▍▎▏  ";
@@ -14,14 +15,15 @@ fn construct_progress_bar(
     total_size: u64,
     progress_chars: &str,
     template: &str,
-    tick: u64,
+    tick: u32,
 ) -> indicatif::ProgressBar {
     let pb = ProgressBar::new(total_size);
 
-    pb.enable_steady_tick(tick);
+    pb.enable_steady_tick(Duration::new(0, tick));
     pb.set_style(
         ProgressStyle::default_bar()
             .template(template)
+            .unwrap()
             .progress_chars(progress_chars),
     );
     pb
@@ -42,7 +44,7 @@ impl WrappedBar {
             .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TEMPLATE.to_string());
         let tick = env::var("PIPEVIEW_PROGRESSBAR_TICK")
             .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TICK.to_string())
-            .parse::<u64>()
+            .parse::<u32>()
             .unwrap();
         let output = construct_progress_bar(total_size, progress_chars, template, tick);
         WrappedBar {

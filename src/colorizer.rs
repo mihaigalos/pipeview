@@ -9,9 +9,9 @@ pub fn colorize<'a>(
     let colors: Vec<&'a str> = colors.split(' ').collect();
 
     let re = Regex::new(regex).unwrap();
-    let caps = re.captures(input);//.ok_or("Cannot apply regex")?;
+    let caps = re.captures(input); //.ok_or("Cannot apply regex")?;
     if caps.is_none() {
-      return Ok(vec![ColoredString::from("abc")]);
+        return Ok(vec![ColoredString::from("abc")]);
     }
     let mut result: Vec<ColoredString> = vec![];
 
