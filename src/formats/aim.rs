@@ -10,7 +10,7 @@ impl Formatter for Aim {
         (regex_groups, colors)
     }
 
-    fn print(){
+    fn print() {
         let (regex_groups, color) = Aim::get_config();
         println!("Aim");
         println!("Regex: {}", regex_groups);
