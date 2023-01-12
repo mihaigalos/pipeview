@@ -1,4 +1,4 @@
-FROM rust:alpine3.16 as base
+FROM rust:alpine3.17 as base
 
 COPY . /src
 
@@ -7,12 +7,12 @@ RUN apk update && \
 
 RUN rustup update 1.64 && rustup default 1.64
 
-RUN cd /src && cargo build --release
+RUN cd /src \
+    &&  cargo build --release
 
 FROM alpine:3.17 as tool
-
-RUN apk update && apk add libgcc
 
 COPY --from=base /src/target/release/pipeview /usr/local/bin
 
 ENTRYPOINT [ "pipeview" ]
+CMD [ "--help" ]
