@@ -2,6 +2,9 @@ FROM rust:alpine3.17 as base
 
 COPY . /src
 
+RUN apk update && \
+    apk add --no-cache musl-dev
+
 RUN rustup update 1.64 && rustup default 1.64
 
 RUN cd /src \
