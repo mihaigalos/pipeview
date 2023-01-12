@@ -1,4 +1,4 @@
-FROM rust:alpine3.16 as base
+FROM rust:alpine3.17 as base
 
 COPY . /src
 
