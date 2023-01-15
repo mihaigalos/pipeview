@@ -11,7 +11,7 @@ pub struct Custom;
 
 fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
     let mut result = HashMap::<String, HashMap<String, String>>::new();
-    let mut f = File::open(&path).expect("Cannot open config file.");
+    let mut f = File::open(path).expect("Cannot open config file.");
     let mut file_contents = String::new();
     let _ = f.read_to_string(&mut file_contents);
     let value: toml::Value = toml::from_str::<Value>(&file_contents).unwrap();
