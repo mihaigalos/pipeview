@@ -39,10 +39,9 @@ fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
 
 impl FormatterFromToml for Custom {
     fn get_config(custom_config_name: &str) -> (String, String) {
-        let mut path = std::env::current_dir().unwrap();
-        path.push(DEFAULT_CONFIG);
-        if path.exists() {
-            let config = read_toml(&path.to_string_lossy());
+
+        fn extract_config_from_toml(path: &str, custom_config_name: &str) -> (String, String) {
+            let config = read_toml(path);
             if config.contains_key(custom_config_name) {
                 let toml_settings = &config[custom_config_name];
                 return (
@@ -50,17 +49,17 @@ impl FormatterFromToml for Custom {
                     toml_settings["colors"].clone(),
                 );
             }
+            ("".to_string(), "".to_string())
+        }
+
+        let mut path = std::env::current_dir().unwrap();
+        path.push(DEFAULT_CONFIG);
+        if path.exists() {
+            return extract_config_from_toml(&path.to_string_lossy(), custom_config_name);
         } else if let Some(mut path) = dirs::home_dir() {
             path.push(DEFAULT_CONFIG_IN_HOME_PATH);
             if path.exists() {
-                let config = read_toml(&path.to_string_lossy());
-                if config.contains_key(custom_config_name) {
-                    let toml_settings = &config[custom_config_name];
-                    return (
-                        toml_settings["regex"].clone(),
-                        toml_settings["colors"].clone(),
-                    );
-                }
+                return extract_config_from_toml(&path.to_string_lossy(), custom_config_name);
             }
         }
         ("".to_string(), "".to_string())
