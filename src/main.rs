@@ -55,13 +55,13 @@ async fn main() -> Result<()> {
     } else if args.get_flag("nginx") {
         pipeview::formats::nginx::Nginx::get_config()
     } else if let Some(config) = args.get_one::<String>("config") {
-        let config_name: String = config
-                .parse()
-                .unwrap();
+        let config_name: String = config.parse().unwrap();
         pipeview::formats::custom::Custom::get_config(&config_name)
     } else {
-        (String::from(args.get_one::<String>("regex").unwrap()),
-        String::from(args.get_one::<String>("colors").unwrap()))
+        (
+            String::from(args.get_one::<String>("regex").unwrap()),
+            String::from(args.get_one::<String>("colors").unwrap()),
+        )
     };
 
     let stdin = std::io::stdin();
