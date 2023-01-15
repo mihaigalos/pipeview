@@ -26,10 +26,9 @@ async fn main() -> Result<()> {
                 .required(false),
         )
         .arg(
-            Arg::new("custom")
-                .long("custom")
-                .help("Parse input as a custom log with configuration from ~/.config/pipeview")
-                .action(ArgAction::SetTrue)
+            Arg::new("config")
+                .long("config")
+                .help("Parse input as a config log with configuration from ~/.config/pipeview")
                 .required(false),
         )
         .arg(
@@ -46,8 +45,11 @@ async fn main() -> Result<()> {
         pipeview::formats::aim::Aim::get_config()
     } else if args.get_flag("nginx") {
         pipeview::formats::nginx::Nginx::get_config()
-    } else if args.get_flag("custom") {
-        pipeview::formats::custom::Custom::get_config("foo")
+    } else if let Some(config) = args.get_one::<String>("config") {
+        let config_name: String = config
+                .parse()
+                .unwrap();
+        pipeview::formats::custom::Custom::get_config(&config_name)
     } else {
         (String::from(args.get_one::<String>("regex").unwrap()),
         String::from(args.get_one::<String>("colors").unwrap()))
