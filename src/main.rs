@@ -3,7 +3,7 @@ use autoclap::autoclap;
 use clap::{Arg, ArgAction, Command};
 use std::io::BufRead;
 
-use pipeview::formats::traits::Formatter;
+use pipeview::formats::traits::{Formatter, FormatterFromToml};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -47,7 +47,7 @@ async fn main() -> Result<()> {
     } else if args.get_flag("nginx") {
         pipeview::formats::nginx::Nginx::get_config()
     } else if args.get_flag("custom") {
-        pipeview::formats::custom::Custom::get_config()
+        pipeview::formats::custom::Custom::get_config("foo")
     } else {
         (String::from(args.get_one::<String>("regex").unwrap()),
         String::from(args.get_one::<String>("colors").unwrap()))

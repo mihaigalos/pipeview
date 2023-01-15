@@ -3,7 +3,7 @@ use crate::formats::traits::Formatter;
 pub struct Nginx;
 
 impl Formatter for Nginx {
-    fn get_config<'a>() -> (String, String) {
+    fn get_config() -> (String, String) {
         let regex_groups = "^(.*?) - - \\[(.*?)\\] \"(.*?) .*?\" (.*?) .*? \".*?\" \"(.*?)\"".to_string();
         let colors = "bgreen white yellow cyan blue".to_string();
 
