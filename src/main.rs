@@ -28,7 +28,16 @@ async fn main() -> Result<()> {
         .arg(
             Arg::new("config")
                 .long("config")
-                .help("Parse input as a config log with configuration from ~/.config/pipeview")
+                .help("Parse input as a config log with configuration from ~/.config/pipeview containing sample config:\n\
+                 \n\
+                 [foo]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"red green blue red green\"\n\
+                 [bar]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"green red blue red green\"\n\
+                 \n\
+                 Call with --config=foo or --config=bar.")
                 .required(false),
         )
         .arg(
