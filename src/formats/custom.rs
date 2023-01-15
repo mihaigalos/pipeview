@@ -5,6 +5,7 @@ use std::fs::File;
 use std::io::Read;
 use toml::Value;
 
+const DEFAULT_CONFIG: &str = "pipeview.toml";
 const DEFAULT_CONFIG_IN_HOME_PATH: &str = ".config/pipeview.toml";
 
 pub struct Custom;
@@ -38,7 +39,19 @@ fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
 
 impl FormatterFromToml for Custom {
     fn get_config(custom_config_name: &str) -> (String, String) {
-        if let Some(mut path) = dirs::home_dir() {
+        if let mut path = std::env::current_dir().unwrap() {
+            path.push(DEFAULT_CONFIG);
+            if path.exists() {
+                let config = read_toml(&path.to_string_lossy());
+                if config.contains_key(custom_config_name) {
+                    let toml_settings = &config[custom_config_name];
+                    return (
+                        toml_settings["regex"].clone(),
+                        toml_settings["colors"].clone(),
+                    );
+                }
+            }
+        } else if let Some(mut path) = dirs::home_dir() {
             path.push(DEFAULT_CONFIG_IN_HOME_PATH);
             if path.exists() {
                 let config = read_toml(&path.to_string_lossy());

@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
         .arg(
             Arg::new("config")
                 .long("config")
-                .help("Parse input as a config log with configuration from ~/.config/pipeview containing sample config:\n\
+                .help("Parse input as a config log with configuration from ~/.config/pipeview.toml OR current folder with filename pipeview.toml, containing sample config:\n\
                  \n\
                  [foo]\n\
                  regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
