@@ -1,0 +1,3 @@
+03/22 08:51:06 WARNING:.....mailslot_create: setsockopt(MCAST_ADD) failed - EDC8116I Address not available.
+03/22 08:51:06 INFO   :....mailbox_register: mailbox allocated for rsvp-udp
+03/22 08:51:06 TRACE  :..entity_initialize: interface 129.1.1.1, entity for rsvp allocated and initialized

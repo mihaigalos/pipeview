@@ -26,6 +26,13 @@ async fn main() -> Result<()> {
                 .required(false),
         )
         .arg(
+            Arg::new("custom")
+                .long("custom")
+                .help("Parse input as a custom log with configuration from ~/.config/pipeview")
+                .action(ArgAction::SetTrue)
+                .required(false),
+        )
+        .arg(
             Arg::new("nginx")
                 .long("nginx")
                 .help("Parse input as Nginx log.")
@@ -39,11 +46,11 @@ async fn main() -> Result<()> {
         pipeview::formats::aim::Aim::get_config()
     } else if args.get_flag("nginx") {
         pipeview::formats::nginx::Nginx::get_config()
+    } else if args.get_flag("custom") {
+        pipeview::formats::custom::Custom::get_config()
     } else {
-        (args.get_one::<String>("regex").map(|s| s.as_str()).unwrap(),
-        args.get_one::<String>("colors")
-            .map(|s| s.as_str())
-            .unwrap())
+        (String::from(args.get_one::<String>("regex").unwrap()),
+        String::from(args.get_one::<String>("colors").unwrap()))
     };
 
     let stdin = std::io::stdin();
@@ -51,7 +58,7 @@ async fn main() -> Result<()> {
         match line {
             Err(_) => break,
             Ok(s) => {
-                let _ = pipeview::colorizer::colorize(&s, regex, colors).unwrap();
+                let _ = pipeview::colorizer::colorize(&s, &regex, &colors).unwrap();
                 println!();
             }
         }
