@@ -9,7 +9,8 @@ A command line pipe inspection utility.
 
 ## Why?
 
-* [x] Simple coloring of an input pipe.
+* [x] Simple coloring of an input pipe with regex and colors as input args.
+* [x] Multiple custom configs in the form of a `pipeview.toml` file in current folder or `~/.config/`.
 * [ ] Progress bar (same as Linux's `pv`) - WIP.
 
 ## Usage
@@ -32,9 +33,9 @@ $ cat test/demo_nginx_access_log | pipeview --nginx
 
 ### Custom configs
 
-You can create a config in `~/.config/pipeview.toml` OR te current folder with filename `pipeview.toml` and call it using `pipeview --config=foo`.
+You can create a config in `~/.config/pipeview.toml` or the current folder with filename `pipeview.toml` and call it using `pipeview --config=foo`.
 
-The format has to be:
+An example custom config could be:
 ```toml
 [foo]
 regex="^(.*?) (.*?) (.*?): (.*?) (.*)"
