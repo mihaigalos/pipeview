@@ -22,7 +22,7 @@ $ cat test/demo_nginx_access_log | pipeview "^(.*?) - - \\[(.*?)\\] \"(.*?) .*?\
 
 ### Nginx
 
-Nginx logs can be directly inspected using the `--nginx` flag:
+Nginx and [aim](https://github.com/mihaigalos/aim) logs can be directly inspected using the `--nginx` or `--aim` flag:
 
 ```bash
 $ cat test/demo_nginx_access_log | pipeview --nginx
@@ -30,6 +30,16 @@ $ cat test/demo_nginx_access_log | pipeview --nginx
 
 ![screenshot-nginx](screenshots/pipeview-nginx.png)
 
+### Custom configs
+
+You can create a config in `~/.config/pipeview.toml` OR te current folder with filename `pipeview.toml` and call it using `pipeview --config=foo`.
+
+The format has to be:
+```toml
+[foo]
+regex="^(.*?) (.*?) (.*?): (.*?) (.*)"
+colors="red green blue red green"
+```
 
 ## Installation
 

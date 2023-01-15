@@ -12,10 +12,14 @@ resolver = "2"
 [dependencies]
 anyhow = "1.0.68"
 autoclap = "0.3.12"
-colored = "2"
 clap = { version = "4.1.1", features = ["string"]}
+colored = "2"
+dirs = "4"
 dotenv = "0.15.0"
 indicatif = "0.17.3"
 regex = "1.7.1"
+serde = "1.0.152"
+serde_derive = "1.0.152"
 strfmt = "0.2.2"
 tokio = { version = "1.24.1", features = ["full"] }
+toml = "0.5.10"

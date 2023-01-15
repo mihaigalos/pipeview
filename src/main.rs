@@ -3,7 +3,7 @@ use autoclap::autoclap;
 use clap::{Arg, ArgAction, Command};
 use std::io::BufRead;
 
-use pipeview::formats::traits::Formatter;
+use pipeview::formats::traits::{Formatter, FormatterFromToml};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -26,6 +26,21 @@ async fn main() -> Result<()> {
                 .required(false),
         )
         .arg(
+            Arg::new("config")
+                .long("config")
+                .help("Parse input as a config log with configuration from ~/.config/pipeview.toml OR current folder with filename pipeview.toml, containing sample config:\n\
+                 \n\
+                 [foo]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"red green blue red green\"\n\
+                 [bar]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"green red blue red green\"\n\
+                 \n\
+                 Call with --config=foo or --config=bar.")
+                .required(false),
+        )
+        .arg(
             Arg::new("nginx")
                 .long("nginx")
                 .help("Parse input as Nginx log.")
@@ -39,11 +54,14 @@ async fn main() -> Result<()> {
         pipeview::formats::aim::Aim::get_config()
     } else if args.get_flag("nginx") {
         pipeview::formats::nginx::Nginx::get_config()
+    } else if let Some(config) = args.get_one::<String>("config") {
+        let config_name: String = config.parse().unwrap();
+        pipeview::formats::custom::Custom::get_config(&config_name)
     } else {
-        (args.get_one::<String>("regex").map(|s| s.as_str()).unwrap(),
-        args.get_one::<String>("colors")
-            .map(|s| s.as_str())
-            .unwrap())
+        (
+            String::from(args.get_one::<String>("regex").unwrap()),
+            String::from(args.get_one::<String>("colors").unwrap()),
+        )
     };
 
     let stdin = std::io::stdin();
@@ -51,7 +69,7 @@ async fn main() -> Result<()> {
         match line {
             Err(_) => break,
             Ok(s) => {
-                let _ = pipeview::colorizer::colorize(&s, regex, colors).unwrap();
+                let _ = pipeview::colorizer::colorize(&s, &regex, &colors).unwrap();
                 println!();
             }
         }
