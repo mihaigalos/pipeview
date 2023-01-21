@@ -1,6 +1,7 @@
 # pipeview
 
 [![CI](https://github.com/mihaigalos/pipeview/actions/workflows/ci.yaml/badge.svg)](https://github.com/mihaigalos/pipeview/actions/workflows/ci.yaml)
+[![CD](https://github.com/mihaigalos/pipeview/actions/workflows/cd.yaml/badge.svg)](https://github.com/mihaigalos/pipeview/actions/workflows/cd.yaml)
 [![crates.io](https://img.shields.io/crates/d/pipeview.svg)](https://crates.io/crates/pipeview)
 
 A command line pipe inspection utility.
