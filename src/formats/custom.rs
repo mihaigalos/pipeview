@@ -68,7 +68,7 @@ impl FormatterFromToml for Custom {
     fn print() {
         let (regex_groups, color) = Custom::get_config("foo");
         println!("Custom");
-        println!("Regex: {}", regex_groups);
-        println!("Color: {}", color);
+        println!("Regex: {regex_groups}");
+        println!("Color: {color}");
     }
 }
