@@ -15,11 +15,11 @@ fn extract_key<'a>(config: &'a HashMap<String, HashMap<String, String>>, key: &'
         return (true, key);
     }
 
-    if config.keys().len() == 1 && key == "" {
-        return (true, &config.keys().next().unwrap());
+    if config.keys().len() == 1 && key.is_empty() {
+        return (true, (config.keys().next().unwrap()));
     }
 
-    return (false, "");
+    (false, "")
 }
 
 fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
