@@ -10,6 +10,18 @@ const DEFAULT_CONFIG_IN_HOME_PATH: &str = ".config/pipeview.toml";
 
 pub struct Custom;
 
+fn extract_key<'a>(config: &'a HashMap<String, HashMap<String, String>>, key: &'a str) -> (bool, &'a str) {
+    if config.contains_key(key) {
+        return (true, key);
+    }
+
+    if config.keys().len() == 1 && key.is_empty() {
+        return (true, (config.keys().next().unwrap()));
+    }
+
+    (false, "")
+}
+
 fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
     let mut result = HashMap::<String, HashMap<String, String>>::new();
     let mut f = File::open(path).expect("Cannot open config file.");
@@ -42,8 +54,9 @@ impl FormatterFromToml for Custom {
 
         fn extract_config_from_toml(path: &str, custom_config_name: &str) -> (String, String) {
             let config = read_toml(path);
-            if config.contains_key(custom_config_name) {
-                let toml_settings = &config[custom_config_name];
+            let (found, key) = extract_key(&config, custom_config_name);
+            if found {
+                let toml_settings = &config[key];
                 return (
                     toml_settings["regex"].clone(),
                     toml_settings["colors"].clone(),

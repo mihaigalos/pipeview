@@ -58,10 +58,18 @@ async fn main() -> Result<()> {
         let config_name: String = config.parse().unwrap();
         pipeview::formats::custom::Custom::get_config(&config_name)
     } else {
-        (
-            String::from(args.get_one::<String>("regex").unwrap()),
-            String::from(args.get_one::<String>("colors").unwrap()),
-        )
+        let ids = args.ids()
+            .map(|id| id.as_str())
+            .collect::<Vec<_>>();
+
+        if ids.contains(&"regex") && ids.contains(&"colors") {
+            (
+                String::from(args.get_one::<String>("regex").unwrap()),
+                String::from(args.get_one::<String>("colors").unwrap()),
+            )
+        } else {
+            pipeview::formats::custom::Custom::get_config("")
+        }
     };
 
     let stdin = std::io::stdin();
