@@ -43,6 +43,10 @@ regex="^(.*?) (.*?) (.*?): (.*?) (.*)"
 colors="red green blue red green"
 ```
 
+In case no custom config is specified, but there is a `pipeview.toml` file in the default paths and it contains only one entry, it will be used by default.
+
+This enables you to have the file under version control and just use `pipeview` out-of-the-box without any args.
+
 ## Installation
 
 ### Building from source
