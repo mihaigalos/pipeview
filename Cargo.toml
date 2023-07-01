@@ -21,5 +21,5 @@ regex = "1.8.4"
 serde = "1.0.164"
 serde_derive = "1.0.164"
 strfmt = "0.2.4"
-tokio = { version = "1.29.0", features = ["full"] }
+tokio = { version = "1.29.1", features = ["full"] }
 toml = "0.7.5"
