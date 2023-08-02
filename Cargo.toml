@@ -16,7 +16,7 @@ clap = { version = "4.3.19", features = ["string"]}
 colored = "2"
 dirs = "5"
 dotenv = "0.15.0"
-indicatif = "0.17.5"
+indicatif = "0.17.6"
 regex = "1.9.1"
 serde = "1.0.180"
 serde_derive = "1.0.180"
