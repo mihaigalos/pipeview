@@ -12,7 +12,7 @@ resolver = "2"
 [dependencies]
 anyhow = "1.0.75"
 autoclap = "0.3.15"
-clap = { version = "4.3.21", features = ["string"]}
+clap = { version = "4.3.23", features = ["string"]}
 colored = "2"
 dirs = "5"
 dotenv = "0.15.0"
