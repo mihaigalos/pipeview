@@ -19,7 +19,7 @@ dotenv = "0.15.0"
 indicatif = "0.17.6"
 regex = "1.9.3"
 serde = "1.0.186"
-serde_derive = "1.0.185"
+serde_derive = "1.0.186"
 strfmt = "0.2.4"
 tokio = { version = "1.32.0", features = ["full"] }
 toml = "0.7.6"
