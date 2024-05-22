@@ -6,8 +6,8 @@ pub fn run<'a>(
     regex: &'a str,
     colors: &'a str,
 ) -> Result<Vec<ColoredString>, &'static str> {
-    if regex.len() > 0 && colors.len() > 0 {
-        return colorize(input, regex, colors);
+    if !regex.is_empty() && !colors.is_empty() {
+        colorize(input, regex, colors)
     } else {
         let num_commas = input.chars().filter(|&c| c == ',').count();
         let num_spaces = input.chars().filter(|&c| c == ' ').count();
@@ -33,7 +33,7 @@ pub fn run<'a>(
                 regex.push_str(" \\s*(.*)");
             }
 
-            colors.push_str(" ");
+            colors.push(' ');
             colors.push_str(&possible_colors[(i + 1) % possible_colors.len()]);
         }
         colorize(input, &regex, &colors)

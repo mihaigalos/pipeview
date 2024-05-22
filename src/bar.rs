@@ -64,14 +64,14 @@ impl WrappedBar {
 
     fn compute_position(&mut self) -> f64 {
         let previous_pos = self.output.position();
-        let pos = std::io::stdin()
+        
+        std::io::stdin()
             .lines()
             .next()
             .unwrap_or_else(|| Ok(previous_pos.to_string()))
             .unwrap()
             .parse::<f64>()
-            .unwrap_or(previous_pos as f64);
-        pos
+            .unwrap_or(previous_pos as f64)
     }
 
     fn set_minmax(&mut self, pos: f64) {
