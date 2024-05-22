@@ -58,9 +58,7 @@ async fn main() -> Result<()> {
         let config_name: String = config.parse().unwrap();
         pipeview::formats::custom::Custom::get_config(&config_name)
     } else {
-        let ids = args.ids()
-            .map(|id| id.as_str())
-            .collect::<Vec<_>>();
+        let ids = args.ids().map(|id| id.as_str()).collect::<Vec<_>>();
 
         if ids.contains(&"regex") && ids.contains(&"colors") {
             (

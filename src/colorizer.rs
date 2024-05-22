@@ -1,31 +1,40 @@
 use colored::*;
 use regex::Regex;
 
-pub fn run <'a>(
+pub fn run<'a>(
     input: &'a str,
     regex: &'a str,
     colors: &'a str,
 ) -> Result<Vec<ColoredString>, &'static str> {
-
     if regex.len() > 0 && colors.len() > 0 {
         return colorize(input, regex, colors);
     } else {
         let num_commas = input.chars().filter(|&c| c == ',').count();
         let num_spaces = input.chars().filter(|&c| c == ' ').count();
-        let upper_range = if num_commas > 0 { num_commas } else { num_spaces };
+        let upper_range = if num_commas > 0 {
+            num_commas
+        } else {
+            num_spaces
+        };
 
         let mut regex: String = "(.*)".to_string();
-        let possible_colors: Vec<String> = vec!["green".to_string(), "cyan".to_string(), "red".to_string(), "white".to_string(), "yellow".to_string() ];
+        let possible_colors: Vec<String> = vec![
+            "green".to_string(),
+            "cyan".to_string(),
+            "red".to_string(),
+            "white".to_string(),
+            "yellow".to_string(),
+        ];
         let mut colors: String = possible_colors[0].clone();
         for i in 0..upper_range {
-          if num_commas > 0 {
-            regex.push_str(",\\s*(.*)");
-          } else {
-            regex.push_str(" \\s*(.*)");
-          }
+            if num_commas > 0 {
+                regex.push_str(",\\s*(.*)");
+            } else {
+                regex.push_str(" \\s*(.*)");
+            }
 
-          colors.push_str(" ");
-          colors.push_str(&possible_colors[(i+1) % possible_colors.len()]);
+            colors.push_str(" ");
+            colors.push_str(&possible_colors[(i + 1) % possible_colors.len()]);
         }
         colorize(input, &regex, &colors)
     }
