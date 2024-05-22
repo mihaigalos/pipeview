@@ -23,7 +23,9 @@ Whichever it finds first will serve as a delimiter for splitting the input for c
 
 Example:
 ```bash
+$ cat ~/.ssh/id_rsa.pub | pipeview
 ```
+![Screenshot 2024-05-22 at 18 07 07](https://github.com/mihaigalos/pipeview/assets/16443090/00de2004-f37b-42b4-a7a9-3abdcd288ed7)
 
 ### Explicit coloring via regex patterns
 Explicit coloring can be performed on the input based on a regular expression.
