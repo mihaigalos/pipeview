@@ -17,10 +17,9 @@ pub fn run <'a>(
             let possible_colors: Vec<String> = vec!["green".to_string(), "cyan".to_string(), "red".to_string(), "white".to_string(), "yellow".to_string() ];
             let mut colors: String = possible_colors[0].clone();
             for i in 0..num_commas {
-              regex.push_str(",(.*)");
+              regex.push_str(",\\s*(.*)");
               colors.push_str(" ");
               colors.push_str(&possible_colors[(i+1) % possible_colors.len()]);
-              println!("--> regex: {}  colors: {}", regex, colors);
             }
             colorize(input, &regex, &colors)
         }
@@ -116,6 +115,17 @@ mod tests {
     }
     #[test]
     fn test_run_works_when_empty_regex_and_colors() {
+        let input = "abc,de";
+        let expected1 = ColoredString::from("abc").green();
+        let expected2 = ColoredString::from("de").cyan();
+
+        let result: Vec<ColoredString> = run(input, "", "").unwrap();
+
+        assert_eq!(result[0], expected1);
+        assert_eq!(result[1], expected2);
+    }
+    #[test]
+    fn test_run_works_when_empty_regex_and_colors_and_input_containing_space() {
         let input = "abc,de";
         let expected1 = ColoredString::from("abc").green();
         let expected2 = ColoredString::from("de").cyan();
