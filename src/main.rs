@@ -77,7 +77,7 @@ async fn main() -> Result<()> {
         match line {
             Err(_) => break,
             Ok(s) => {
-                let _ = pipeview::colorizer::colorize(&s, &regex, &colors).unwrap();
+                let _ = pipeview::colorizer::run(&s, &regex, &colors).unwrap();
                 println!();
             }
         }
