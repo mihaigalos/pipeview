@@ -10,7 +10,10 @@ const DEFAULT_CONFIG_IN_HOME_PATH: &str = ".config/pipeview.toml";
 
 pub struct Custom;
 
-fn extract_key<'a>(config: &'a HashMap<String, HashMap<String, String>>, key: &'a str) -> (bool, &'a str) {
+fn extract_key<'a>(
+    config: &'a HashMap<String, HashMap<String, String>>,
+    key: &'a str,
+) -> (bool, &'a str) {
     if config.contains_key(key) {
         return (true, key);
     }
@@ -51,7 +54,6 @@ fn read_toml(path: &str) -> HashMap<String, HashMap<String, String>> {
 
 impl FormatterFromToml for Custom {
     fn get_config(custom_config_name: &str) -> (String, String) {
-
         fn extract_config_from_toml(path: &str, custom_config_name: &str) -> (String, String) {
             let config = read_toml(path);
             let (found, key) = extract_key(&config, custom_config_name);

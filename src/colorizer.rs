@@ -1,7 +1,46 @@
 use colored::*;
 use regex::Regex;
 
-pub fn colorize<'a>(
+pub fn run<'a>(
+    input: &'a str,
+    regex: &'a str,
+    colors: &'a str,
+) -> Result<Vec<ColoredString>, &'static str> {
+    if !regex.is_empty() && !colors.is_empty() {
+        colorize(input, regex, colors)
+    } else {
+        let num_commas = input.chars().filter(|&c| c == ',').count();
+        let num_spaces = input.chars().filter(|&c| c == ' ').count();
+        let upper_range = if num_commas > 0 {
+            num_commas
+        } else {
+            num_spaces
+        };
+
+        let mut regex: String = "(.*)".to_string();
+        let possible_colors: Vec<String> = vec![
+            "green".to_string(),
+            "cyan".to_string(),
+            "red".to_string(),
+            "white".to_string(),
+            "yellow".to_string(),
+        ];
+        let mut colors: String = possible_colors[0].clone();
+        for i in 0..upper_range {
+            if num_commas > 0 {
+                regex.push_str(",\\s*(.*)");
+            } else {
+                regex.push_str(" \\s*(.*)");
+            }
+
+            colors.push(' ');
+            colors.push_str(&possible_colors[(i + 1) % possible_colors.len()]);
+        }
+        colorize(input, &regex, &colors)
+    }
+}
+
+fn colorize<'a>(
     input: &'a str,
     regex: &'a str,
     colors: &'a str,
@@ -20,7 +59,7 @@ pub fn colorize<'a>(
 
     if colors.len() != caps.len() {
         panic!(
-            "Length of input: {} != length of regex match patterns: {}",
+            "Length of colors: {} != length of regex match patterns: {}",
             colors.len(),
             caps.len()
         );
@@ -87,5 +126,38 @@ mod tests {
         let caps = re.captures("ab cd").ok_or("Cannot apply regex").unwrap();
         let result = all_captures_except_first(&caps).unwrap();
         assert_eq!(result, expected);
+    }
+    #[test]
+    fn test_run_works_when_empty_regex_and_colors_and_input_containing_space() {
+        let input = "abc de";
+        let expected1 = ColoredString::from("abc").green();
+        let expected2 = ColoredString::from("de").cyan();
+
+        let result: Vec<ColoredString> = run(input, "", "").unwrap();
+
+        assert_eq!(result[0], expected1);
+        assert_eq!(result[1], expected2);
+    }
+    #[test]
+    fn test_run_works_when_empty_regex_and_colors() {
+        let input = "abc,de";
+        let expected1 = ColoredString::from("abc").green();
+        let expected2 = ColoredString::from("de").cyan();
+
+        let result: Vec<ColoredString> = run(input, "", "").unwrap();
+
+        assert_eq!(result[0], expected1);
+        assert_eq!(result[1], expected2);
+    }
+    #[test]
+    fn test_run_works_when_empty_regex_and_colors_and_input_containing_commaspace() {
+        let input = "abc, de";
+        let expected1 = ColoredString::from("abc").green();
+        let expected2 = ColoredString::from("de").cyan();
+
+        let result: Vec<ColoredString> = run(input, "", "").unwrap();
+
+        assert_eq!(result[0], expected1);
+        assert_eq!(result[1], expected2);
     }
 }
