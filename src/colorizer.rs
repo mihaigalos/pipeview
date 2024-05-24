@@ -19,11 +19,11 @@ pub fn run<'a>(
 
         let mut regex: String = "(.*)".to_string();
         let possible_colors: Vec<String> = vec![
-            "green".to_string(),
-            "cyan".to_string(),
-            "red".to_string(),
             "white".to_string(),
+            "cyan".to_string(),
+            "blue".to_string(),
             "yellow".to_string(),
+            "green".to_string(),
         ];
         let mut colors: String = possible_colors[0].clone();
         for i in 0..upper_range {
@@ -130,7 +130,7 @@ mod tests {
     #[test]
     fn test_run_works_when_empty_regex_and_colors_and_input_containing_space() {
         let input = "abc de";
-        let expected1 = ColoredString::from("abc").green();
+        let expected1 = ColoredString::from("abc").white();
         let expected2 = ColoredString::from("de").cyan();
 
         let result: Vec<ColoredString> = run(input, "", "").unwrap();
@@ -141,7 +141,7 @@ mod tests {
     #[test]
     fn test_run_works_when_empty_regex_and_colors() {
         let input = "abc,de";
-        let expected1 = ColoredString::from("abc").green();
+        let expected1 = ColoredString::from("abc").white();
         let expected2 = ColoredString::from("de").cyan();
 
         let result: Vec<ColoredString> = run(input, "", "").unwrap();
@@ -152,7 +152,7 @@ mod tests {
     #[test]
     fn test_run_works_when_empty_regex_and_colors_and_input_containing_commaspace() {
         let input = "abc, de";
-        let expected1 = ColoredString::from("abc").green();
+        let expected1 = ColoredString::from("abc").white();
         let expected2 = ColoredString::from("de").cyan();
 
         let result: Vec<ColoredString> = run(input, "", "").unwrap();
