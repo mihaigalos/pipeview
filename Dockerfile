@@ -1,11 +1,11 @@
-FROM rust:alpine3.17 as base
+FROM rust:alpine3.19 as base
 
 COPY . /src
 
 RUN apk update && \
     apk add --no-cache musl-dev
 
-RUN rustup update 1.70 && rustup default 1.70
+RUN rustup update 1.74 && rustup default 1.74
 
 RUN cd /src \
     &&  cargo build --release
