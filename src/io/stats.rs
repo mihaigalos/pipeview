@@ -14,7 +14,7 @@ use crossterm::terminal::ClearType;
 use std::io::Stderr;
 use std::io::Write;
 
-pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()> {
+pub fn loop_stats(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()> {
     let mut total_bytes = 0;
     let start = std::time::Instant::now();
     let mut timer = Timer::new(STATS_TIMER_RESOLUTION_MS);
