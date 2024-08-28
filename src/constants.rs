@@ -1,5 +1,5 @@
 pub const BUFFER_SIZE: usize = 4096;
-pub const STATS_TIMER_RESOLUTION_MS: u64 = 100;
+pub const STATS_TIMER_RESOLUTION_MS: u64 = 1000;
 
 pub const BYTE: (f64, &str) = (1., "B");
 pub const KILO: (f64, &str) = (1024., "KB");
