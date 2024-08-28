@@ -13,6 +13,7 @@ resolver = "2"
 anyhow = "1.0.75"
 autoclap = "0.3.15"
 clap = { version = "4.4.6", features = ["string"]}
+crossterm = "0.28.1"
 colored = "2"
 dirs = "5"
 dotenv = "0.15.0"
