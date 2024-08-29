@@ -2,6 +2,7 @@ use std::sync::mpsc::Receiver;
 
 use crate::constants::STATS_TIMER_RESOLUTION_MS;
 use crate::io::timer::Timer;
+use crate::constants::*;
 
 use crossterm::cursor;
 use crossterm::style;
@@ -50,9 +51,11 @@ pub fn loop_stats(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()
 }
 
 fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64) {
+    let bytes = bytes.as_human_readable("");
     let bytes = style::style(format!("{bytes} bytes ")).with(Color::Red);
     let elapsed = style::style(elapsed).with(Color::Green);
-    let rate = style::style(format!(" [{rate:.0} b/s]")).with(Color::Blue);
+    let rate = rate.as_human_readable("/s");
+    let rate = style::style(format!(" {rate}")).with(Color::Blue);
 
     let _ = crossterm::execute!(
         stderr,
@@ -75,5 +78,39 @@ impl TimeOutput for u64 {
         let (minutes, seconds) = (left / 60, left % 60);
 
         format!("{hours}:{minutes:02}:{seconds:02}")
+    }
+}
+
+pub trait BytesOutput {
+    fn as_human_readable(&self, suffix: &str) -> String;
+}
+
+impl BytesOutput for f64 {
+    fn as_human_readable(&self, suffix: &str) -> String {
+        let (unit, description) = if *self > EXA.0 {
+            EXA
+        } else if *self >= PETA.0 && *self < EXA.0 {
+            PETA
+        } else if *self >= TERRA.0 && *self < PETA.0 {
+            TERRA
+        } else if *self >= GIGA.0 && *self < TERRA.0 {
+            GIGA
+        } else if *self >= MEGA.0 && *self < GIGA.0 {
+            MEGA
+        } else if *self >= KILO.0 && *self < MEGA.0 {
+            KILO
+        } else {
+            BYTE
+        };
+
+        let result = *self / unit;
+
+        format!("{result:.3}{description}{suffix}")
+    }
+}
+
+impl BytesOutput for usize {
+    fn as_human_readable(&self, suffix: &str) -> String {
+        (*self as f64).as_human_readable(suffix)
     }
 }
