@@ -1,4 +1,5 @@
 use anyhow::Result;
+use atty::Stream;
 use autoclap::autoclap;
 use clap::{Arg, ArgAction, Command, Parser};
 use std::io::BufRead;
@@ -12,7 +13,6 @@ use pipeview::io::write::loop_write;
 use pipeview::io::stats::loop_stats;
 use pipeview::io::read::loop_read;
 use std::sync::mpsc;
-
 
 fn io_main() -> std::io::Result<()> {
     let args = Args::parse();
@@ -54,7 +54,13 @@ fn io_main() -> std::io::Result<()> {
 }
 #[tokio::main]
 async fn main() -> Result<()> {
-    Ok(io_main()?)
+    let (_, is_stdout) = (atty::is(Stream::Stdin), atty::is(Stream::Stdout));
+    if is_stdout {
+      println!("[Pending refactoring] Classic regex coloring.");
+      Ok(())
+    } else {
+      Ok(io_main()?)
+    }
     // let app: clap::Command = autoclap!()
     //     .arg(
     //         Arg::new("regex")

@@ -12,9 +12,17 @@ A command line pipe inspection utility.
 
 * [x] Simple coloring of an input pipe with regex and colors as input args.
 * [x] Multiple custom configs in the form of a `pipeview.toml` file in current folder or `~/.config/`.
-* [ ] Progress bar (same as Linux's `pv`) - WIP.
+* [x] Progress bar (same as Linux's `pv`).
 
 ## Usage
+
+### Progress bar
+
+We can trigger this functionality by using `pipeview` as an intermediate between input and output pipes:
+
+```bash
+yes | target/release/pipeview | xargs echo > /dev/null
+```
 
 ### Simple coloring with no args
 When calling pipeview with no parameters, it will search for commas in the input. If no commas are found, it will default to searching for spaces.
