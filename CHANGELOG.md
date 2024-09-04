@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Git-cliff - Setup
 - Git-cliff - Setup
+- Git-cliff - Setup
 
 ### 📚 Documentation
 
