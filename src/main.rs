@@ -1,12 +1,75 @@
 use anyhow::Result;
+use atty::Stream;
 use autoclap::autoclap;
-use clap::{Arg, ArgAction, Command};
+use clap::{Arg, ArgAction, Command, Parser};
+use std::env;
 use std::io::BufRead;
 
-use pipeview::formats::traits::{Formatter, FormatterFromToml};
+use std::thread;
 
+use pipeview::formats::traits::{Formatter, FormatterFromToml};
+use pipeview::args::Args;
+use pipeview::io::write::loop_write;
+use pipeview::io::stats::loop_stats;
+use pipeview::io::read::loop_read;
+use std::sync::mpsc;
+
+fn io_main() -> std::io::Result<()> {
+
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() > 1 {
+        let path = &args[1];
+        let metadata = std::fs::metadata(path)?;
+        let file_size = metadata.len();
+        println!("File size: {} bytes", file_size);
+    } else {
+        println!("Reading from stdin. Cannot determine size.");
+    }
+    let args = Args::parse();
+    let Args {
+        infile,
+        outfile,
+        silent,
+    } = args;
+    let silent = silent || !std::env::var("PIPEVIEW_SILENT").unwrap_or_default().is_empty();
+
+    let (stats_tx, stats_rx) = mpsc::channel();
+    let (write_tx, write_rx) = mpsc::channel();
+
+    let read_handle = thread::spawn({
+        let infile = infile.clone();
+        let stats_tx = stats_tx.clone();
+        let write_tx = write_tx.clone();
+        move || loop_read(infile, stats_tx, write_tx)
+    });
+
+    let stats_handle = thread::spawn({
+        move || loop_stats(silent, stats_rx)
+    });
+
+    let write_handle = thread::spawn({
+        let outfile = outfile.clone();
+        move || loop_write(outfile, write_rx) // Directly pass write_rx
+    });
+
+    let read_io_result = read_handle.join().unwrap();
+    let stats_io_result = stats_handle.join().unwrap();
+    let write_io_result = write_handle.join().unwrap();
+
+    read_io_result?;
+    stats_io_result?;
+    write_io_result?;
+
+    Ok(())
+}
 #[tokio::main]
 async fn main() -> Result<()> {
+    let (_, is_stdout) = (atty::is(Stream::Stdin), atty::is(Stream::Stdout));
+    if !is_stdout {
+      return Ok(io_main()?);
+    }
+
     let app: clap::Command = autoclap!()
         .arg(
             Arg::new("regex")
@@ -81,9 +144,5 @@ async fn main() -> Result<()> {
         }
     }
 
-    // let mut pipeview = pipeview::bar::WrappedBar::new(DEFAULT_PIPEVIEW_SIZE);
-    // loop {
-    //     pipeview.update();
-    // }
     Ok(())
 }
