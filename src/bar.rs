@@ -50,7 +50,7 @@ impl WrappedBar {
         WrappedBar {
             output,
             max: 0.0,
-            min: std::f64::MAX,
+            min: f64::MAX,
         }
     }
     pub fn update(&mut self) {
@@ -64,7 +64,7 @@ impl WrappedBar {
 
     fn compute_position(&mut self) -> f64 {
         let previous_pos = self.output.position();
-        
+
         std::io::stdin()
             .lines()
             .next()
