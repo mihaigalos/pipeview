@@ -32,7 +32,7 @@ Whichever it finds first will serve as a delimiter for splitting the input for c
 
 Example:
 ```bash
-$ cat ~/.ssh/id_rsa.pub | pipeview
+cat ~/.ssh/id_rsa.pub | pipeview
 ```
 ![Screenshot 2024-05-22 at 18 07 07](https://github.com/mihaigalos/pipeview/assets/16443090/00de2004-f37b-42b4-a7a9-3abdcd288ed7)
 
@@ -40,7 +40,7 @@ $ cat ~/.ssh/id_rsa.pub | pipeview
 Explicit coloring can be performed on the input based on a regular expression.
 
 ```bash
-$ cat test/demo_nginx_access_log | pipeview "^(.*?) - - \\[(.*?)\\] \"(.*?) .*?\" (.*?) .*? \".*?\" \"(.*?)\"" 'bgreen white yellow cyan blue'
+cat test/demo_nginx_access_log | pipeview "^(.*?) - - \\[(.*?)\\] \"(.*?) .*?\" (.*?) .*? \".*?\" \"(.*?)\"" 'bgreen white yellow cyan blue'
 ```
 
 ### Nginx
@@ -48,7 +48,7 @@ $ cat test/demo_nginx_access_log | pipeview "^(.*?) - - \\[(.*?)\\] \"(.*?) .*?\
 Nginx and [aim](https://github.com/mihaigalos/aim) logs can be directly inspected using the `--nginx` or `--aim` flag:
 
 ```bash
-$ cat test/demo_nginx_access_log | pipeview --nginx
+cat test/demo_nginx_access_log | pipeview --nginx
 ```
 
 ![screenshot-nginx](screenshots/pipeview-nginx.png)
@@ -73,5 +73,5 @@ This enables you to have the file under version control and just use `pipeview` 
 ### Building from source
 
 ```bash
-$ cargo install pipeview
+cargo install pipeview
 ```
