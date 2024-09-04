@@ -3,17 +3,11 @@ use atty::Stream;
 use autoclap::autoclap;
 use clap::{Arg, ArgAction, Command, Parser};
 use std::env;
-use std::io::{self, BufRead, Read};
-use std::fs;
-use std::fs::File;
-use std::os::fd::FromRawFd;
-use std::os::fd::AsRawFd;
+use std::io::BufRead;
 
-use std::sync::Arc;
 use std::thread;
 
 use pipeview::formats::traits::{Formatter, FormatterFromToml};
-use pipeview::io::stats;
 use pipeview::args::Args;
 use pipeview::io::write::loop_write;
 use pipeview::io::stats::loop_stats;
@@ -21,7 +15,6 @@ use pipeview::io::read::loop_read;
 use std::sync::mpsc;
 
 fn io_main() -> std::io::Result<()> {
-    let stdin = io::stdin();
 
     let args: Vec<String> = env::args().collect();
 
@@ -30,8 +23,6 @@ fn io_main() -> std::io::Result<()> {
         let metadata = std::fs::metadata(path)?;
         let file_size = metadata.len();
         println!("File size: {} bytes", file_size);
-
-        let mut file = File::open(path)?;
     } else {
         println!("Reading from stdin. Cannot determine size.");
     }
