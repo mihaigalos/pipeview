@@ -1,0 +1,46 @@
+repos:
+- repo: local
+  hooks:
+    - id: generate-changelog
+      name: Generate Changelog
+      entry: >
+        /bin/bash -c '
+        if [ ! -f cliff.toml ]; then
+          git cliff --init;
+        fi;
+        git cliff --output CHANGELOG.md;'
+      language: script
+      files: .*
+
+- repo: local
+  hooks:
+  - id: git diff
+    name: git diff
+    description: Show diffs from previous hook fixes
+    entry: >
+      /bin/bash -c '
+      function diff_with_delta_with_no_paging_to_prevent_freezes() {
+          git --no-pager diff | delta --paging=never
+      }
+
+      function show_diff() {
+          if grep pager ~/.gitconfig | grep delta >/dev/null; then
+              diff_with_delta_with_no_paging_to_prevent_freezes
+          else
+              git diff
+          fi
+      }
+
+      function produce_exit_code_for_precommit_hook() {
+          git diff --exit-code --quiet
+      }
+
+
+      show_diff
+      produce_exit_code_for_precommit_hook;'
+
+    language: script
+    files: .*
+    pass_filenames: false
+    always_run: true
+
