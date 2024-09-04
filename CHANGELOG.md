@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 🚀 Features
+
+- Git-cliff - Setup
+
 ### 📚 Documentation
 
 - Improve wording
