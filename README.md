@@ -21,7 +21,8 @@ A command line pipe inspection utility.
 We can trigger this functionality by using `pipeview` as an intermediate between input and output pipes:
 
 ```bash
-yes | target/release/pipeview | xargs echo > /dev/null
+yes | target/release/pipeview | xargs echo > /dev/null # transparent pipe
+pipeview < Cargo.toml | xargs echo > /dev/null # file pipe
 ```
 
 ### Simple coloring with no args
