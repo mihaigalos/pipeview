@@ -8,7 +8,9 @@ repos:
         if [ ! -f cliff.toml ]; then
           git cliff --init;
         fi;
-        git cliff --output CHANGELOG.md;'
+        git cliff --output CHANGELOG.md;
+        git add CHANGELOG.md && git commit -m "chore: Changelog - Update"
+        '
       language: script
       files: .*
 
