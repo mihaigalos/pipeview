@@ -75,89 +75,83 @@ fn io_main() -> std::io::Result<()> {
 #[tokio::main]
 async fn main() -> Result<()> {
     let (_, is_stdout) = (atty::is(Stream::Stdin), atty::is(Stream::Stdout));
-    if is_stdout {
-      println!("[Pending refactoring] Classic regex coloring.");
-      Ok(())
-    } else {
-      Ok(io_main()?)
+    if !is_stdout {
+      return Ok(io_main()?);
     }
-    // let app: clap::Command = autoclap!()
-    //     .arg(
-    //         Arg::new("regex")
-    //             .help("Regular expression groups to match the input.")
-    //             .required(false),
-    //     )
-    //     .arg(
-    //         Arg::new("colors")
-    //             .help("Actual colors for the matched groups.")
-    //             .required(false),
-    //     )
-    //     .arg(
-    //         Arg::new("aim")
-    //             .long("aim")
-    //             .help("Parse input as mihaigalos/aim log.")
-    //             .action(ArgAction::SetTrue)
-    //             .required(false),
-    //     )
-    //     .arg(
-    //         Arg::new("config")
-    //             .long("config")
-    //             .help("Parse input as a config log with configuration from ~/.config/pipeview.toml OR the current folder with filename pipeview.toml, containing sample config:\n\
-    //              \n\
-    //              [foo]\n\
-    //              regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
-    //              colors=\"red green blue red green\"\n\
-    //              [bar]\n\
-    //              regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
-    //              colors=\"green red blue red green\"\n\
-    //              \n\
-    //              Call with --config=foo or --config=bar.")
-    //             .required(false),
-    //     )
-    //     .arg(
-    //         Arg::new("nginx")
-    //             .long("nginx")
-    //             .help("Parse input as Nginx log.")
-    //             .action(ArgAction::SetTrue)
-    //             .required(false),
-    //     );
 
-    // let args = app.try_get_matches().unwrap_or_else(|e| e.exit());
+    let app: clap::Command = autoclap!()
+        .arg(
+            Arg::new("regex")
+                .help("Regular expression groups to match the input.")
+                .required(false),
+        )
+        .arg(
+            Arg::new("colors")
+                .help("Actual colors for the matched groups.")
+                .required(false),
+        )
+        .arg(
+            Arg::new("aim")
+                .long("aim")
+                .help("Parse input as mihaigalos/aim log.")
+                .action(ArgAction::SetTrue)
+                .required(false),
+        )
+        .arg(
+            Arg::new("config")
+                .long("config")
+                .help("Parse input as a config log with configuration from ~/.config/pipeview.toml OR the current folder with filename pipeview.toml, containing sample config:\n\
+                 \n\
+                 [foo]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"red green blue red green\"\n\
+                 [bar]\n\
+                 regex=\"^(.*?) (.*?) (.*?): (.*?) (.*)\"\n\
+                 colors=\"green red blue red green\"\n\
+                 \n\
+                 Call with --config=foo or --config=bar.")
+                .required(false),
+        )
+        .arg(
+            Arg::new("nginx")
+                .long("nginx")
+                .help("Parse input as Nginx log.")
+                .action(ArgAction::SetTrue)
+                .required(false),
+        );
 
-    // let (regex, colors) = if args.get_flag("aim") {
-    //     pipeview::formats::aim::Aim::get_config()
-    // } else if args.get_flag("nginx") {
-    //     pipeview::formats::nginx::Nginx::get_config()
-    // } else if let Some(config) = args.get_one::<String>("config") {
-    //     let config_name: String = config.parse().unwrap();
-    //     pipeview::formats::custom::Custom::get_config(&config_name)
-    // } else {
-    //     let ids = args.ids().map(|id| id.as_str()).collect::<Vec<_>>();
+    let args = app.try_get_matches().unwrap_or_else(|e| e.exit());
 
-    //     if ids.contains(&"regex") && ids.contains(&"colors") {
-    //         (
-    //             String::from(args.get_one::<String>("regex").unwrap()),
-    //             String::from(args.get_one::<String>("colors").unwrap()),
-    //         )
-    //     } else {
-    //         pipeview::formats::custom::Custom::get_config("")
-    //     }
-    // };
+    let (regex, colors) = if args.get_flag("aim") {
+        pipeview::formats::aim::Aim::get_config()
+    } else if args.get_flag("nginx") {
+        pipeview::formats::nginx::Nginx::get_config()
+    } else if let Some(config) = args.get_one::<String>("config") {
+        let config_name: String = config.parse().unwrap();
+        pipeview::formats::custom::Custom::get_config(&config_name)
+    } else {
+        let ids = args.ids().map(|id| id.as_str()).collect::<Vec<_>>();
 
-    // let stdin = std::io::stdin();
-    // for line in stdin.lock().lines() {
-    //     match line {
-    //         Err(_) => break,
-    //         Ok(s) => {
-    //             let _ = pipeview::colorizer::run(&s, &regex, &colors).unwrap();
-    //             println!();
-    //         }
-    //     }
-    // }
+        if ids.contains(&"regex") && ids.contains(&"colors") {
+            (
+                String::from(args.get_one::<String>("regex").unwrap()),
+                String::from(args.get_one::<String>("colors").unwrap()),
+            )
+        } else {
+            pipeview::formats::custom::Custom::get_config("")
+        }
+    };
 
-    // // let mut pipeview = pipeview::bar::WrappedBar::new(DEFAULT_PIPEVIEW_SIZE);
-    // // loop {
-    // //     pipeview.update();
-    // // }
-    // Ok(())
+    let stdin = std::io::stdin();
+    for line in stdin.lock().lines() {
+        match line {
+            Err(_) => break,
+            Ok(s) => {
+                let _ = pipeview::colorizer::run(&s, &regex, &colors).unwrap();
+                println!();
+            }
+        }
+    }
+
+    Ok(())
 }
