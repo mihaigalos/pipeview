@@ -10,7 +10,7 @@ RUN rustup update 1.74 && rustup default 1.74
 RUN cd /src \
     &&  cargo build --release
 
-FROM alpine:3.20 as tool
+FROM alpine:3.21 as tool
 
 COPY --from=base /src/target/release/pipeview /usr/local/bin
 
