@@ -23,8 +23,6 @@ fn io_main() -> std::io::Result<()> {
         let metadata = std::fs::metadata(path)?;
         let file_size = metadata.len();
         println!("File size: {} bytes", file_size);
-    } else {
-        println!("Reading from stdin. Cannot determine size.");
     }
     let args = Args::parse();
     let Args {
