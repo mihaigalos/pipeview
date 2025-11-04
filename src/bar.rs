@@ -33,6 +33,7 @@ pub struct WrappedBar {
     pub output: indicatif::ProgressBar,
     pub max: f64,
     pub min: f64,
+    pub total_size: u64,
 }
 
 impl WrappedBar {
@@ -51,6 +52,7 @@ impl WrappedBar {
             output,
             max: 0.0,
             min: f64::MAX,
+            total_size: total_size,
         }
     }
     pub fn update(&mut self) {
@@ -99,6 +101,86 @@ impl WrappedBar {
                     " {min} ".to_string().white(),
                     "Max:".green().bold(),
                     " {max} ".to_string().white(),
+                ),
+                &vars,
+            )
+            .unwrap(),
+        );
+    }
+
+    pub fn new_for_transfer(total_size: u64) -> WrappedBar {
+        dotenv().ok();
+        let progress_chars = &env::var("PIPEVIEW_PROGRESSBAR_PROGRESS_CHARS")
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_PROGRESS_CHARS.to_string());
+        let template = &env::var("PIPEVIEW_PROGRESSBAR_TEMPLATE")
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TEMPLATE.to_string());
+        let tick = env::var("PIPEVIEW_PROGRESSBAR_TICK")
+            .unwrap_or_else(|_| DEFAULT_PIPEVIEW_TICK.to_string())
+            .parse::<u32>()
+            .unwrap();
+        let output = construct_progress_bar(total_size, progress_chars, template, tick);
+        
+        WrappedBar {
+            output,
+            max: total_size as f64,
+            min: 0.0,
+            total_size,
+        }
+    }
+
+    pub fn update_transfer(&mut self, bytes_transferred: usize, rate: f64, elapsed_secs: u64) {
+        self.output.set_position(bytes_transferred as u64);
+        self.set_transfer_message(bytes_transferred, rate, elapsed_secs);
+    }
+
+    pub fn finish_transfer(&self) {
+        self.output.finish_and_clear();
+    }
+
+    fn set_transfer_message(&mut self, bytes_transferred: usize, rate: f64, elapsed_secs: u64) {
+        use crate::io::stats::{BytesOutput, TimeOutput};
+        
+        let transferred_str = (bytes_transferred as f64).as_human_readable("");
+        let rate_str = rate.as_human_readable("/s");
+        let percentage = if self.total_size > 0 {
+            bytes_transferred as f64 / self.total_size as f64 * 100.0
+        } else {
+            0.0
+        };
+        let elapsed_str = elapsed_secs._to_string();
+        
+        let eta_str = if rate > 0.0 && self.total_size > 0 {
+            let remaining_bytes = self.total_size.saturating_sub(bytes_transferred as u64);
+            let eta_secs = (remaining_bytes as f64 / rate) as u64;
+            eta_secs._to_string()
+        } else {
+            "--:--:--".to_string()
+        };
+
+        let mut vars: HashMap<String, String> = HashMap::new();
+        vars.insert("transferred".to_string(), transferred_str);
+        vars.insert("rate".to_string(), rate_str);
+        vars.insert("percentage".to_string(), format!("{:.1}%", percentage));
+        vars.insert("elapsed".to_string(), elapsed_str);
+        vars.insert("eta".to_string(), eta_str);
+        vars.insert("total".to_string(), (self.total_size as f64).as_human_readable(""));
+        
+        self.output.set_message(
+            strfmt(
+                &format!(
+                    "{}{}{}{}{}{}{}{}{}{}{}{}",
+                    "{transferred}".to_string().white().bold(),
+                    "/".to_string().white(),
+                    "{total} ".to_string().white().bold(),
+                    "(".to_string().white(),
+                    "{percentage}".to_string().green().bold(),
+                    ") ".to_string().white(),
+                    "{rate}".to_string().cyan().bold(),
+                    " [".to_string().white(),
+                    "{elapsed}".to_string().yellow().bold(),
+                    "<".to_string().white(),
+                    "{eta}".to_string().yellow().bold(),
+                    "]".to_string().white(),
                 ),
                 &vars,
             )

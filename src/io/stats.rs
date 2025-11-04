@@ -3,6 +3,7 @@ use std::sync::mpsc::Receiver;
 use crate::constants::STATS_TIMER_RESOLUTION_MS;
 use crate::io::timer::Timer;
 use crate::constants::*;
+use crate::bar::WrappedBar;
 
 use crossterm::cursor;
 use crossterm::style;
@@ -16,10 +17,16 @@ use std::io::Stderr;
 use std::io::Write;
 
 pub fn loop_stats(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()> {
+    loop_stats_with_size(silent, stats_rx, None)
+}
+
+pub fn loop_stats_with_size(silent: bool, stats_rx: Receiver<usize>, total_size: Option<u64>) -> std::io::Result<()> {
     let mut total_bytes = 0;
     let start = std::time::Instant::now();
     let mut timer = Timer::new(STATS_TIMER_RESOLUTION_MS);
     let mut stderr = std::io::stderr();
+    
+    let mut progress_bar = total_size.map(|size| WrappedBar::new_for_transfer(size));
 
     loop {
         let num_bytes = stats_rx.recv().unwrap();
@@ -30,12 +37,17 @@ pub fn loop_stats(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()
 
         if !silent && timer.ready {
             timer.ready = false;
-            output_progress(
-                &mut stderr,
-                total_bytes,
-                start.elapsed().as_secs()._to_string(),
-                rate_per_second,
-            );
+            
+            if let Some(ref mut bar) = progress_bar {
+                bar.update_transfer(total_bytes, rate_per_second, start.elapsed().as_secs());
+            } else {
+                output_progress(
+                    &mut stderr,
+                    total_bytes,
+                    start.elapsed().as_secs()._to_string(),
+                    rate_per_second,
+                );
+            }
         }
 
         if num_bytes == 0 {
@@ -43,7 +55,9 @@ pub fn loop_stats(silent: bool, stats_rx: Receiver<usize>) -> std::io::Result<()
         }
     }
 
-    if !silent {
+    if let Some(ref mut bar) = progress_bar {
+        bar.finish_transfer();
+    } else if !silent {
         eprintln!();
     }
 

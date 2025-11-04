@@ -10,26 +10,33 @@ use std::thread;
 use pipeview::formats::traits::{Formatter, FormatterFromToml};
 use pipeview::args::Args;
 use pipeview::io::write::loop_write;
-use pipeview::io::stats::loop_stats;
+use pipeview::io::stats::loop_stats_with_size;
 use pipeview::io::read::loop_read;
 use std::sync::mpsc;
 
 fn io_main() -> std::io::Result<()> {
-
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() > 1 {
-        let path = &args[1];
-        let metadata = std::fs::metadata(path)?;
-        let file_size = metadata.len();
-        println!("File size: {} bytes", file_size);
-    }
     let args = Args::parse();
     let Args {
         infile,
         outfile,
         silent,
     } = args;
+    
+    let total_size = if let Some(ref input_file) = infile {
+        std::fs::metadata(input_file).ok().map(|m| m.len())
+    } else {
+        // Try to get size from stdin if it's a regular file (redirected)
+        use std::os::unix::io::AsRawFd;
+        unsafe {
+            let mut stat: libc::stat = std::mem::zeroed();
+            let fd = std::io::stdin().as_raw_fd();
+            if libc::fstat(fd, &mut stat) == 0 && (stat.st_mode & libc::S_IFREG) != 0 {
+                Some(stat.st_size as u64)
+            } else {
+                None
+            }
+        }
+    };
     let silent = silent || !std::env::var("PIPEVIEW_SILENT").unwrap_or_default().is_empty();
 
     let (stats_tx, stats_rx) = mpsc::channel();
@@ -43,7 +50,7 @@ fn io_main() -> std::io::Result<()> {
     });
 
     let stats_handle = thread::spawn({
-        move || loop_stats(silent, stats_rx)
+        move || loop_stats_with_size(silent, stats_rx, total_size)
     });
 
     let write_handle = thread::spawn({
