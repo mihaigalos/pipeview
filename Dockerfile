@@ -5,10 +5,8 @@ COPY . /src
 RUN apk update && \
     apk add --no-cache musl-dev
 
-RUN rustup update 1.74 && rustup default 1.74
-
 RUN cd /src \
-    &&  cargo build --release
+    && cargo build --release
 
 FROM alpine:3.22 as tool
 
