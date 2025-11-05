@@ -22,7 +22,9 @@ We can trigger this functionality by using `pipeview` as an intermediate between
 
 ```bash
 yes | pipeview | xargs echo > /dev/null # transparent pipe
-pipeview < Cargo.toml | xargs echo > /dev/null # file pipe
+
+dd if=/dev/urandom of=randomfile.bin bs=10M count=1000
+pipeview < randomfile.bin >/dev/null # file pipe
 ```
 
 ### Simple coloring with no args
