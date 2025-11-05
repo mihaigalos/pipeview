@@ -26,7 +26,7 @@ pub fn loop_stats_with_size(silent: bool, stats_rx: Receiver<usize>, total_size:
     let mut timer = Timer::new(STATS_TIMER_RESOLUTION_MS);
     let mut stderr = std::io::stderr();
     
-    let mut progress_bar = total_size.map(|size| WrappedBar::new_for_transfer(size));
+    let mut progress_bar = total_size.map(WrappedBar::new_for_transfer);
 
     loop {
         let num_bytes = stats_rx.recv().unwrap();

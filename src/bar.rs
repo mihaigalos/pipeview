@@ -52,7 +52,7 @@ impl WrappedBar {
             output,
             max: 0.0,
             min: f64::MAX,
-            total_size: total_size,
+            total_size,
         }
     }
     pub fn update(&mut self) {
