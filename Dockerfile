@@ -8,7 +8,7 @@ RUN apk update && \
 RUN cd /src \
     && cargo build --release
 
-FROM alpine:3.23 as tool
+FROM alpine:3.24 as tool
 
 COPY --from=base /src/target/release/pipeview /usr/local/bin
 
